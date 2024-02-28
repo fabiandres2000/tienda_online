@@ -1,7 +1,12 @@
 <?php
+    header("Access-Control-Allow-Origin: *");
+
+    // Otros encabezados CORS opcionales
+    header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+    header("Access-Control-Allow-Headers: Origin, Content-Type, Accept");
     include_once("conexion.php");
 
-    $sql = "SELECT domicilios.*, clientes.nombre, clientes.direccion, clientes.celular FROM domicilios inner join clientes on clientes.id = domicilios.id_cliente where estado = 'Registrado'";
+    $sql = "SELECT domicilios.*, clientes.nombre, clientes.direccion, clientes.celular FROM domicilios inner join clientes on clientes.id = domicilios.id_cliente where estado = 'Registrado' order by domicilios.id ASC";
     $result = $conn->query($sql);
 
     $domicilios = array();
