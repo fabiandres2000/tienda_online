@@ -119,6 +119,7 @@
                 <div id="lista_carrito">
                     
                 </div>
+    
                 <div class="row">
                     <div class="col-12">
                         <div class="input-group mb-3">
@@ -130,8 +131,12 @@
                     </div>
                 </div>
                 <hr>
-                <div style="border-bottom: 0px !important;" class="checkout__order__total">Total <span id="total_pagar">$0.00</span></div>
+
+                <div style="margin-bottom: -11px; border-bottom: 0px !important;" class="checkout__order__total">Subtotal <span id="total_pagar">$0.00</span></div>
+                <div style="margin-bottom: -11px; border-bottom: 0px !important;" class="checkout__order__total">Domicilio <span id="total_pagar">$500</span></div>
+                <div style="margin-bottom: -11px; border-bottom: 0px !important;" class="checkout__order__total">Total <span id="total_pagar_total">$0.00</span></div>
                 <hr>
+
                 <button onclick="verificarCliente()" class="site-btn">REALIZAR PEDIDO</button>
                 <button onclick="cerrarCarrito()" type="submit" style="background-color: brown;" class="site-btn">VOLVER</button>
             </div>
@@ -236,16 +241,27 @@
                 productos += '<h6>' + producto.descripcion + '</h6>';
                 productos += '<h6 style="font-weight: bold; color: '+color_disponible+'"> Disponible: ' + producto.existencia + " " + producto.unidad_medida +' </h6>';
                 productos += '<span>$' + producto.precio_venta + '</span>';
-                productos += '<div class="row" style="margin-top: 10px">';
-                productos += '<div class="col-6">';
-                productos += '<input id="caja_texto_'+index+'"  type="text" class="form-control" placeholder="Cantidad">'
+                productos += '<div class="row" style="margin-top: 10px">';               
+                productos += '<div class="col-8" style="display: flex; align-items: center">';
+                productos += '<button onclick="disminuir_value('+index+')" style="font-size: 8px" class="btn btn-danger"><i class="fa-solid fa-minus"></i></button>';
+                productos += '<input style="font-size: 13px" id="caja_texto_'+index+'"  type="text" class="form-control" placeholder="Cantidad">'
+                productos += '<button onclick="aumentar_value('+index+')" style="font-size: 8px" class="btn btn-success"><i class="fa-solid fa-plus"></i></button>';
+                productos += '</div>'
+                productos += '<div class="col-4" style="padding-left: 0px">';
+                var tipo_envio = 1;
+                if(producto.unidad_medida == "Unidades"){
+                    productos += '<span> Und </span>'
+                }else{
+                    tipo_envio = 2;
+                    productos += '<select style="font-size: 13px" class="form-control" id="tipo_unidad_'+index+'">'
+                    productos += '<option value="Kilos">Kilos</option>'
+                    productos += '<option value="Libras">Libras</option>'
+                    productos += '</select>'
+                }
                 productos += '</div>';
-                productos += '<div class="col-6">';
-                productos += '<span>' + producto.unidad_medida + '</span>'
                 productos += '</div>';
-                productos += '<div style="margin-top: 15px" class="col-12">';
-                productos += '<button onclick="agregarCarrito('+index+', \''+producto.codigo_barras+'\')" style="width: 100%" class="btn btn-success">Agregar producto <i class="fa-solid fa-plus"></i></button>'
-                productos += '</div>';
+                productos += '<div style="padding: 0px; margin-top: 15px" class="col-12">';
+                productos += '<button onclick="agregarCarrito('+index+', \''+producto.codigo_barras+'\', '+tipo_envio+')" style="width: 100%" class="btn btn-success">Agregar producto <i class="fa-solid fa-plus"></i></button>'
                 productos += '</div>';
                 productos += '</div>';
                 productos += '</div>';
@@ -283,18 +299,29 @@
                 productos += '<h6>' + producto.descripcion + '</h6>';
                 productos += '<h6 style="font-weight: bold; color: '+color_disponible+'"> Disponible: ' + producto.existencia + " " + producto.unidad_medida +' </h6>';
                 productos += '<span>$' + producto.precio_venta + '</span>';
-                
+
+                var tipo_envio = 1;
                 if(producto.estado == 0){
                     productos += '<div class="row" style="margin-top: 10px">';               
-                    productos += '<div class="col-6">';
-                    productos += '<input id="caja_texto_'+index+'" type="text" class="form-control" placeholder="Cantidad">'
+                    productos += '<div class="col-8" style="display: flex; align-items: center">';
+                    productos += '<button onclick="disminuir_value('+index+')" style="font-size: 8px" class="btn btn-danger"><i class="fa-solid fa-minus"></i></button>';
+                    productos += '<input style="font-size: 13px" id="caja_texto_'+index+'"  type="text" class="form-control" placeholder="Cantidad">'
+                    productos += '<button onclick="aumentar_value('+index+')" style="font-size: 8px" class="btn btn-success"><i class="fa-solid fa-plus"></i></button>';
+                    productos += '</div>'
+                    productos += '<div class="col-4" style="padding-left: 0px">';
+                    if(producto.unidad_medida == "Unidades"){
+                        productos += '<span> Und </span>'
+                    }else{
+                        tipo_envio = 2;
+                        productos += '<select style="font-size: 13px" class="form-control" id="tipo_unidad_'+index+'">'
+                        productos += '<option value="Kilos">Kilos</option>'
+                        productos += '<option value="Libras">Libras</option>'
+                        productos += '</select>'
+                    }
                     productos += '</div>';
-                    productos += '<div class="col-6">';
-                    productos += '<span>' + producto.unidad_medida + '</span>'
                     productos += '</div>';
-                    productos += '</div>';
-                    productos += '<div style="margin-top: 15px" class="col-12">';
-                    productos += '<button onclick="agregarCarrito('+index+', \''+producto.codigo_barras+'\')" style="width: 100%" class="btn btn-success">Agregar producto <i class="fa-solid fa-plus"></i></button>'
+                    productos += '<div style="padding: 0px; margin-top: 15px" class="col-12">';
+                    productos += '<button onclick="agregarCarrito('+index+', \''+producto.codigo_barras+'\', '+tipo_envio+')" style="width: 100%" class="btn btn-success">Agregar producto <i class="fa-solid fa-plus"></i></button>'
                     productos += '</div>';
                 }else{
                     productos += '<div style="margin-top: 15px" class="col-12">';
@@ -308,12 +335,31 @@
             $('#productos').html(productos);
         }
 
-        function agregarCarrito(index, codigo_barras){
+        function agregarCarrito(index, codigo_barras, tipo_unidad){
             if(document.getElementById("caja_texto_"+index).value != ""){
                 const index_p = lista_productos.findIndex(producto => producto.codigo_barras === codigo_barras);
                 if(lista_productos[index_p].existencia > 0){
                     lista_productos[index_p].estado = 1;
-                    lista_productos[index_p].cantidad = parseInt(document.getElementById("caja_texto_"+index).value);
+                    if(tipo_unidad == 1){
+                        lista_productos[index_p].cantidad = parseInt(document.getElementById("caja_texto_"+index).value);
+                    }else{
+                        var peso_digitado = document.getElementById("caja_texto_"+index).value;
+                        if(lista_productos[index_p].unidad_medida == "Kilos"){
+                            var unidad_seleccionada = document.getElementById("tipo_unidad_"+index).value;
+                            if(unidad_seleccionada == "Kilos"){
+                                lista_productos[index_p].cantidad = parseInt(peso_digitado);
+                            }else{
+                                lista_productos[index_p].cantidad = parseFloat(peso_digitado) * 0.5
+                            }
+                        }else{
+                            var unidad_seleccionada = document.getElementById("tipo_unidad_"+index).value;
+                            if(unidad_seleccionada == "Kilos"){
+                                lista_productos[index_p].cantidad = parseInt(peso_digitado) * 2;
+                            }else{
+                                lista_productos[index_p].cantidad = parseInt(peso_digitado)
+                            }
+                        }
+                    }
                     filtrarProductos();
                     carrito.push(lista_productos[index_p]);
                     actualizarCantidad();
@@ -376,6 +422,9 @@
                 var totalFormateado = total.toLocaleString('es-CO', { style: 'currency', currency: 'COP' });
                 document.getElementById("total_pagar").innerText = totalFormateado;
 
+                var total_total = total + 500;
+                var totalFormateado2 = total_total.toLocaleString('es-CO', { style: 'currency', currency: 'COP' });
+                document.getElementById("total_pagar_total").innerText = totalFormateado2;
 
             });
             listaCarrito.innerHTML = html;
@@ -401,6 +450,9 @@
                                     document.getElementById("nombre").value = data.datos.nombre;
                                 }
                             }, 500)
+                        },
+                        error: function(data){
+                            debugger
                         }
                     });
                 }
@@ -462,6 +514,29 @@
                 });
             }else{
                 toastr.error('¡Todos los datos son obligatorios!');
+            }
+        }
+
+        function aumentar_value(index){
+            var valor_actual = 0;
+            if(document.getElementById("caja_texto_"+index).value == ""){
+                valor_actual = 0;
+            }else{
+                valor_actual = parseInt(document.getElementById("caja_texto_"+index).value);
+            }
+            valor_actual += 1;
+            document.getElementById("caja_texto_"+index).value = valor_actual;
+        }
+
+        function disminuir_value(index){
+            var valor_actual = 0;
+            if(document.getElementById("caja_texto_"+index).value == "" || document.getElementById("caja_texto_"+index).value == "0"){
+                valor_actual = 0;
+                document.getElementById("caja_texto_"+index).value = valor_actual;
+            }else{
+                valor_actual = parseInt(document.getElementById("caja_texto_"+index).value);
+                valor_actual -= 1;
+                document.getElementById("caja_texto_"+index).value = valor_actual;
             }
         }
     </script>

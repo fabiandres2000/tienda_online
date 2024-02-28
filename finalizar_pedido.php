@@ -11,6 +11,9 @@
     if($registrado == 0){
         $sql = "INSERT INTO `clientes`(`nombre`, `celular`, `direccion`) VALUES ('$nombre','$celular','$direccion')";
         $conn->query($sql);
+    }else{
+        $sql = "UPDATE clientes SET `nombre` = '$nombre', `direccion` = '$direccion' where celular = $celular";
+        $conn->query($sql);
     }
 
     $sql = "SELECT * FROM clientes where celular = ".$celular;
@@ -32,7 +35,7 @@
         $cantidad = $item["cantidad"];
         $unidad = $item["unidad"];
 
-        $sql = "INSERT INTO `productos_vendidos`(`id_domicilio`, `descripcion`, `codigo_barras`, `precio`, `cantidad`) VALUES ('$id_pedido','$descripcion','$codigo_barras', '$precio', '$cantidad')";
+        $sql = "INSERT INTO `productos_vendidos`(`id_domicilio`, `descripcion`, `codigo_barras`, `precio`, `cantidad`,  `unidad`) VALUES ('$id_pedido','$descripcion','$codigo_barras', '$precio', '$cantidad', '$unidad')";
         $conn->query($sql);
     }
 
