@@ -2,9 +2,15 @@
 
     include_once("conexion.php");
 
-    $sql = "SELECT * FROM productos";
-    $result = $conn->query($sql);
+    $filtro = $_GET['filtro'];
 
+    if($filtro == "inicial"){
+        $sql = "SELECT * FROM productos limit 50";
+    }else{
+        $sql = "SELECT * FROM productos WHERE descripcion LIKE '%$filtro%'";
+    }
+   
+    $result = $conn->query($sql);
     $productos = array();
 
     if ($result->num_rows > 0) {

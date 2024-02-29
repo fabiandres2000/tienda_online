@@ -65,6 +65,20 @@
             overflow: hidden;
             outline: 0;
         }
+
+        .bad {
+            width: 27px;
+            height: 29px;
+            border-radius: 50%;
+            background-color: red;
+            color: white;
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            top: -13px;
+            right: -13px;
+        }
     </style>
 </head>
 
@@ -81,6 +95,7 @@
                 </div>
             </div>
             <div class="col-2">
+                <span id="cantidad_span" class="bad">0</span>
                 <button onclick="mostrarCarrito()" class="btn btn-warning" style="padding: 11px;"><i class="fa-solid fa-cart-shopping" style="font-size: 1.5em;"></i></button>
             </div>
         </div>
@@ -111,9 +126,9 @@
             <div class="checkout__order" style="height: 100vh !important; width: 100vw !important;">
                 <h4>Tu orden</h4>
                 <div class="row" style="font-weight: bold;">
-                    <div class="col-6">Producto</div>
+                    <div class="col-5">Producto</div>
                     <div class="col-3">Cantidad</div>
-                    <div class="col-3">Total</div>  
+                    <div class="col-4">Total</div>  
                 </div>
                 <hr>
                 <div id="lista_carrito">
@@ -202,23 +217,19 @@
         }
 
         var lista_productos = [];
-        var productosFiltrados = [];
         var carrito = [];
 
         $(document).ready(function(){
             $.ajax({
-                url: 'productos.php',
+                url: 'productos.php?filtro=inicial',
                 type: 'GET',
                 dataType: 'json',
                 success: function(data) {
                     lista_productos = data;
-                    $.each(lista_productos, function(index, producto) {
-                        producto.estado = 0;
-                    });
                     mapearTodo();
                 },
                 error: function(xhr, status, error) {
-                console.error('Error al obtener los productos:', error);
+                    console.error('Error al obtener los productos:', error);
                 }
             });
         });
@@ -232,8 +243,10 @@
                 }else{
                     color_disponible = "green";
                 }
-                var seleccionado_clase = producto.estado == 1 ? " seleccionado" : "";
-                productos += '<div class="item_prod latest-product__item'+seleccionado_clase+'">';
+
+                var seleccionado = carrito.filter(item => item.codigo_barras ==  producto.codigo_barras).length > 0 ? 'seleccionado' : '';
+
+                productos += '<div class="item_prod latest-product__item '+seleccionado+'">';
                 productos += '<div style="width: 100px" class="text-center latest-product__item__pic">';
                 productos += '<img style="width: auto !important" src="data:image/jpeg;base64,' + producto.imagen + '" alt="">';
                 productos += '</div>';
@@ -241,6 +254,7 @@
                 productos += '<h6>' + producto.descripcion + '</h6>';
                 productos += '<h6 style="font-weight: bold; color: '+color_disponible+'"> Disponible: ' + producto.existencia + " " + producto.unidad_medida +' </h6>';
                 productos += '<span>$' + producto.precio_venta + '</span>';
+                var tipo_envio = 1;
                 productos += '<div class="row" style="margin-top: 10px">';               
                 productos += '<div class="col-8" style="display: flex; align-items: center">';
                 productos += '<button onclick="disminuir_value('+index+')" style="font-size: 8px" class="btn btn-danger"><i class="fa-solid fa-minus"></i></button>';
@@ -248,7 +262,6 @@
                 productos += '<button onclick="aumentar_value('+index+')" style="font-size: 8px" class="btn btn-success"><i class="fa-solid fa-plus"></i></button>';
                 productos += '</div>'
                 productos += '<div class="col-4" style="padding-left: 0px">';
-                var tipo_envio = 1;
                 if(producto.unidad_medida == "Unidades"){
                     productos += '<span> Und </span>'
                 }else{
@@ -270,100 +283,69 @@
             $('#productos').html(productos);
         }
 
-        function filtrarProductos() {
-            var filtro = document.getElementById("filtroDescripcion").value.toLowerCase();
-           
-            if (filtro === "") {
-                productosFiltrados = lista_productos;
-            } else {
-                productosFiltrados = lista_productos.filter(function(producto) {
-                    return producto.descripcion.toLowerCase().includes(filtro);
-                });
+        function filtrarProductos(){
+            var filtro = document.getElementById("filtroDescripcion").value;
+
+            if(filtro == ""){
+                filtro = "inicial";
             }
 
-            var productos = '';
-
-            $.each(productosFiltrados, function(index, producto) {
-                if(producto.existencia == 0){
-                    color_disponible = "red";
-                }else{
-                    color_disponible = "green";
+            $.ajax({
+                url: 'productos.php?filtro='+filtro,
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    lista_productos = data;
+                    mapearTodo();
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error al obtener los productos:', error);
                 }
-
-                var seleccionado_clase = producto.estado == 1 ? " seleccionado" : "";
-                productos += '<div class="item_prod latest-product__item'+seleccionado_clase+'">';
-                productos += '<div style="width: 100px" class="text-center latest-product__item__pic">';
-                productos += '<img style="width: auto !important" src="data:image/jpeg;base64,' + producto.imagen + '" alt="">';
-                productos += '</div>';
-                productos += '<div class="latest-product__item__text">';
-                productos += '<h6>' + producto.descripcion + '</h6>';
-                productos += '<h6 style="font-weight: bold; color: '+color_disponible+'"> Disponible: ' + producto.existencia + " " + producto.unidad_medida +' </h6>';
-                productos += '<span>$' + producto.precio_venta + '</span>';
-
-                var tipo_envio = 1;
-                if(producto.estado == 0){
-                    productos += '<div class="row" style="margin-top: 10px">';               
-                    productos += '<div class="col-8" style="display: flex; align-items: center">';
-                    productos += '<button onclick="disminuir_value('+index+')" style="font-size: 8px" class="btn btn-danger"><i class="fa-solid fa-minus"></i></button>';
-                    productos += '<input style="font-size: 13px" id="caja_texto_'+index+'"  type="text" class="form-control" placeholder="Cantidad">'
-                    productos += '<button onclick="aumentar_value('+index+')" style="font-size: 8px" class="btn btn-success"><i class="fa-solid fa-plus"></i></button>';
-                    productos += '</div>'
-                    productos += '<div class="col-4" style="padding-left: 0px">';
-                    if(producto.unidad_medida == "Unidades"){
-                        productos += '<span> Und </span>'
-                    }else{
-                        tipo_envio = 2;
-                        productos += '<select style="font-size: 13px" class="form-control" id="tipo_unidad_'+index+'">'
-                        productos += '<option value="Kilos">Kilos</option>'
-                        productos += '<option value="Libras">Libras</option>'
-                        productos += '</select>'
-                    }
-                    productos += '</div>';
-                    productos += '</div>';
-                    productos += '<div style="padding: 0px; margin-top: 15px" class="col-12">';
-                    productos += '<button onclick="agregarCarrito('+index+', \''+producto.codigo_barras+'\', '+tipo_envio+')" style="width: 100%" class="btn btn-success">Agregar producto <i class="fa-solid fa-plus"></i></button>'
-                    productos += '</div>';
-                }else{
-                    productos += '<div style="margin-top: 15px" class="col-12">';
-                    productos += '<button onclick="eliminarCarrito('+index+', \''+producto.codigo_barras+'\')" style="width: 100%" class="btn btn-danger">Eliminar producto <i class="fa-solid fa-trash-can"></i></button>'
-                    productos += '</div>';
-                }
-                productos += '</div>';
-                productos += '</div>';
             });
 
-            $('#productos').html(productos);
         }
 
         function agregarCarrito(index, codigo_barras, tipo_unidad){
+            var cantidad_escogida = 0;
             if(document.getElementById("caja_texto_"+index).value != ""){
                 const index_p = lista_productos.findIndex(producto => producto.codigo_barras === codigo_barras);
                 if(lista_productos[index_p].existencia > 0){
-                    lista_productos[index_p].estado = 1;
                     if(tipo_unidad == 1){
-                        lista_productos[index_p].cantidad = parseInt(document.getElementById("caja_texto_"+index).value);
+                        cantidad_escogida = parseInt(document.getElementById("caja_texto_"+index).value);
                     }else{
                         var peso_digitado = document.getElementById("caja_texto_"+index).value;
                         if(lista_productos[index_p].unidad_medida == "Kilos"){
                             var unidad_seleccionada = document.getElementById("tipo_unidad_"+index).value;
                             if(unidad_seleccionada == "Kilos"){
-                                lista_productos[index_p].cantidad = parseInt(peso_digitado);
+                                cantidad_escogida = parseInt(peso_digitado);
                             }else{
-                                lista_productos[index_p].cantidad = parseFloat(peso_digitado) * 0.5
+                                cantidad_escogida = parseFloat(peso_digitado) * 0.5
                             }
                         }else{
                             var unidad_seleccionada = document.getElementById("tipo_unidad_"+index).value;
                             if(unidad_seleccionada == "Kilos"){
-                                lista_productos[index_p].cantidad = parseInt(peso_digitado) * 2;
+                                cantidad_escogida = parseInt(peso_digitado) * 2;
                             }else{
-                                lista_productos[index_p].cantidad = parseInt(peso_digitado)
+                                cantidad_escogida = parseInt(peso_digitado)
                             }
                         }
                     }
-                    filtrarProductos();
-                    carrito.push(lista_productos[index_p]);
+                   
+                    var producto = lista_productos[index_p];
+                    const productoExistenteIndex  = carrito.findIndex(p => p.codigo_barras === producto.codigo_barras);
+
+                    if (productoExistenteIndex !== -1) {
+                        carrito[productoExistenteIndex].cantidad += cantidad_escogida;
+                        toastr.success('se actualizo la cantidad del producto existente en el carrito');
+                    } else {
+                        lista_productos[index_p].cantidad = cantidad_escogida;
+                        carrito.push(producto);
+                        toastr.success('Producto agregado al carrito');
+                    }
+
                     actualizarCantidad();
-                    toastr.success('Producto agregado al carrito');
+                    mapearTodo();
+                    document.getElementById("cantidad_span").innerHTML = carrito.length;
                 }else{
                     toastr.error('No hay unidades disponibles para este producto');
                 }
@@ -372,12 +354,12 @@
             }
         }
 
-        function eliminarCarrito(index, codigo_barras){
-            const index_p = lista_productos.findIndex(producto => producto.codigo_barras === codigo_barras);
-            lista_productos[index_p].estado = 0;
+        function eliminarCarrito(codigo_barras){
             carrito = carrito.filter(producto => producto.codigo_barras !==  codigo_barras);
-            filtrarProductos();
             actualizarCantidad();
+            mapearProductosCarrito();
+            mapearTodo();
+            document.getElementById("cantidad_span").innerHTML = carrito.length;
         }
 
         function actualizarCantidad(){
@@ -412,9 +394,9 @@
             total = 0;
             carrito.forEach(function(producto) {
                 html += "<div class='row' style='border-bottom: 1px solid grey; margin-bottom: 15px ;padding-bottom: 10px;'>"
-                html += "<div class= 'col-6'>" + producto.descripcion + " </div>";
+                html += "<div class= 'col-5'>" + producto.descripcion + " </div>";
                 html += "<div class= 'col-3'>" + producto.cantidad + " " + (producto.unidad_medida == "Unidades" ? "Und" : producto.unidad_medida == "Kilos" ? "Kl" : "Lbs") + " </div>";
-                html += "<div class= 'col-3'>" + (producto.cantidad * producto.precio_venta).toLocaleString('es-CO', { style: 'currency', currency: 'COP' }) + " </div>";
+                html += "<div style='display: flex' class= 'col-4'>" + (producto.cantidad * producto.precio_venta).toLocaleString('es-CO', { style: 'currency', currency: 'COP' }) + "<i style='color: red; font-size: 23px; margin-left: 10px;' onclick='eliminarCarrito(\""+producto.codigo_barras+"\")' class='fa-solid fa-trash-can'></i></div>";
                 html += "</div>";
 
                 total += producto.cantidad * parseFloat(producto.precio_venta);
@@ -441,7 +423,6 @@
                         type: 'GET',
                         dataType: 'json',
                         success: function(data) {
-                            debugger
                             $('#modal_confirmar_compra').modal('show');
                             setTimeout(()=>{
                                 document.getElementById("titulo_modal").innerText = data.mensaje;
