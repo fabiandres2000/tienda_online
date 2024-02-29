@@ -9,13 +9,13 @@
     $carrito = json_decode($_POST["carrito"], true);
 
     if($registrado == 0){
-        $sql = "INSERT INTO `clientes`(`nombre`, `celular`, `direccion`) VALUES ('$nombre','$celular','$direccion')";
-        $conn->query($sql);
+        $sql = "INSERT INTO clientes (nombre, celular, direccion) VALUES ('$nombre','$celular','$direccion')";
     }else{
-        $sql = "UPDATE clientes SET `nombre` = '$nombre', `direccion` = '$direccion' where celular = $celular";
-        $conn->query($sql);
+        $sql = "UPDATE clientes SET nombre = '$nombre', direccion = '$direccion' where celular = $celular";
     }
 
+    $conn->query($sql);
+    
     $sql = "SELECT * FROM clientes where celular = ".$celular;
     $result = $conn->query($sql);
     $cliente = $result->fetch_assoc();
@@ -40,5 +40,4 @@
     }
 
     echo "¡Pedido realizado correctamente!";
-
 ?>

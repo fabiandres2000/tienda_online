@@ -441,6 +441,7 @@
                         type: 'GET',
                         dataType: 'json',
                         success: function(data) {
+                            debugger
                             $('#modal_confirmar_compra').modal('show');
                             setTimeout(()=>{
                                 document.getElementById("titulo_modal").innerText = data.mensaje;
@@ -452,7 +453,7 @@
                             }, 500)
                         },
                         error: function(data){
-                            debugger
+                            
                         }
                     });
                 }

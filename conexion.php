@@ -2,9 +2,9 @@
 
 
     $servername = "localhost";
-    $username = "id21917458_root";
-    $password = "cuentafalsa17-A";
-    $dbname = "id21917458_tienda";
+    $username = "FQ006US00001";
+    $password = "cuentafalsa17*A";
+    $dbname = "tienda";
 
     /*
     $servername = "localhost";
