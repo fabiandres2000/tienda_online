@@ -175,7 +175,7 @@
                             </div>
                             <div class="col-6" style="display: flex; justify-content: center; flex-direction: column;">
                                 <h4 style="font-weight: 800; font-size: 22px;">Productos de la canasta familiar</h4>
-                                <button style="margin-top: 10px; width: max-content;" class="btn btn-danger">Ver Productos</button>
+                                <button onclick="verProductosCategoria('Alimentos')" style="margin-top: 10px; width: max-content;" class="btn btn-danger">Ver Productos</button>
                             </div>
                         </div>
                     </div>
@@ -188,7 +188,7 @@
                             </div>
                             <div class="col-6" style="display: flex; justify-content: center; flex-direction: column;">
                                 <h4 style="font-weight: 800; font-size: 22px;">Fritos & Jugos</h4>
-                                <button style="margin-top: 10px; width: max-content;" class="btn btn-danger">Ver Productos</button>
+                                <button onclick="verProductosCategoria('Fritos')" style="margin-top: 10px; width: max-content;" class="btn btn-danger">Ver Productos</button>
                             </div>
                         </div>
                     </div>
@@ -201,7 +201,7 @@
                             </div>
                             <div class="col-6" style="display: flex; justify-content: center; flex-direction: column;">
                                 <h4 style="font-weight: 800; font-size: 22px;">Gaseosas & Bebidas</h4>
-                                <button style="margin-top: 10px; width: max-content;" class="btn btn-danger">Ver Productos</button>
+                                <button onclick="verProductosCategoria('Bebidas')" style="margin-top: 10px; width: max-content;" class="btn btn-danger">Ver Productos</button>
                             </div>
                         </div>
                     </div>
@@ -214,7 +214,7 @@
                             </div>
                             <div class="col-6" style="display: flex; justify-content: center; flex-direction: column;">
                                 <h4 style="font-weight: 800; font-size: 22px;">Carnes</h4>
-                                <button style="margin-top: 10px; width: max-content;" class="btn btn-danger">Ver Productos</button>
+                                <button  onclick="verProductosCategoria('Carnes')" style="margin-top: 10px; width: max-content;" class="btn btn-danger">Ver Productos</button>
                             </div>
                         </div>
                     </div>
@@ -227,7 +227,7 @@
                             </div>
                             <div class="col-6" style="display: flex; justify-content: center; flex-direction: column;">
                                 <h4 style="font-weight: 800; font-size: 22px;">Aseo & Hogar</h4>
-                                <button style="margin-top: 10px; width: max-content;" class="btn btn-danger">Ver Productos</button>
+                                <button  onclick="verProductosCategoria('Aseo')" style="margin-top: 10px; width: max-content;" class="btn btn-danger">Ver Productos</button>
                             </div>
                         </div>
                     </div>
@@ -240,7 +240,7 @@
                             </div>
                             <div class="col-6" style="display: flex; justify-content: center; flex-direction: column;">
                                 <h4 style="font-weight: 800; font-size: 22px;">Productos de farmacia</h4>
-                                <button style="margin-top: 10px; width: max-content;" class="btn btn-danger">Ver Productos</button>
+                                <button  onclick="verProductosCategoria('Farmacia')" style="margin-top: 10px; width: max-content;" class="btn btn-danger">Ver Productos</button>
                             </div>
                         </div>
                     </div>
@@ -251,6 +251,9 @@
     <!-- Banner End -->
 
     <div id="div_productos" class="container" style="min-height: 60vh; margin-top: 33vh; display: none;">
+        <div style="display: none;" class="text-right" id="opciones_categoria">
+            <button onclick="mostrarInicio()" style="border-radius: 50%; width: 53px; height: 53px;" class="btn btn-danger"><i class="fa-solid fa-arrow-left"></i></button>
+        </div>
         <div class="row">
             <div class="col-lg-4 col-md-6">
                 <div class="latest-product__text">
@@ -393,6 +396,32 @@
         var lista_productos = [];
         var carrito = [];
 
+        function verProductosCategoria(categoria){
+            document.getElementById("baner_categorias").style.display = "none";
+            document.getElementById("div_productos").style.display = "block";
+            document.getElementById("opciones_categoria").style.display = "block";
+            document.getElementById("productos").innerHTML = "";
+
+            $.ajax({
+                url: 'productos_categoria.php?categoria='+categoria,
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    lista_productos = data;
+                    mapearTodo();
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error al obtener los productos:', error);
+                }
+            });
+        }
+
+        function  mostrarInicio(){
+            document.getElementById("baner_categorias").style.display = "block";
+            document.getElementById("opciones_categoria").style.display = "none";
+            document.getElementById("div_productos").style.display = "none";
+        }
+
         function mapearTodo(){
             var productos = '';
             $.each(lista_productos, function(index, producto) {
@@ -448,7 +477,7 @@
             if (filtroLength % 2 === 0) {
                 setTimeout(()=>{
                     if(filtro == ""){
-                    document.getElementById("baner_categorias").style.display = "block";
+                        document.getElementById("baner_categorias").style.display = "block";
                         document.getElementById("div_productos").style.display = "none";
                     }else{
                         document.getElementById("baner_categorias").style.display = "none";
