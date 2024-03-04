@@ -7,7 +7,7 @@
     <meta name="keywords" content="Ogani, unica, creative, html">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Provisiones | Carlos Andres</title>
+    <title>Prov - Carlos Andres</title>
 
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;600;900&display=swap" rel="stylesheet">
@@ -25,6 +25,9 @@
     <link rel="stylesheet" href="toast/toastr.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.all.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.5/dist/sweetalert2.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+   
 
     <style>
         .item_prod {
@@ -77,225 +80,88 @@
             right: -13px;
         }
     </style>
-
 </head>
 
-<body>
-    <!-- Page Preloder -->
-    <div id="preloder">
-        <div class="loader"></div>
-    </div>
-
-    <!-- Humberger Begin -->
-    <div class="humberger__menu__overlay"></div>
-    <div class="humberger__menu__wrapper">
-        <div class="humberger__menu__logo">
-            <a href="#"><img style="width: 89%;" src="img/logo.png" alt=""></a>
+<body style="overflow-x: hidden;">
+    <!-- Latest Product Section Begin -->
+    <section style="padding: 0px !important;" class="latest-product spad">
+        <div style="position: fixed; top: 0px; background-color: white; z-index: 1000; padding-bottom: 30px !important; padding-top: 40px; padding-right: 15px; padding-left: 15px; width: 100vw;" class="row">
+            <div class="col-8">
+                <div class="input-group mb-3">
+                    <input oninput="filtrarProductos()" id="filtroDescripcion" style="font-size: 25px;" type="text" class="form-control" placeholder="Buscar" aria-label="Buscar" aria-describedby="basic-addon2">
+                    <div class="input-group-append">
+                      <span class="input-group-text" id="basic-addon2"><i class="fas fa-search"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-2">
+                <span id="cantidad_span" class="bad">0</span>
+                <button onclick="mostrarCarrito()" class="btn btn-warning" style="padding: 11px;"><i class="fa-solid fa-cart-shopping" style="font-size: 1.5em;"></i></button>
+            </div>
+            <div class="col-2">
+                <a href="mis_pedidos.html" style="padding: 11px; border-radius: 50%;" class="btn btn-success"><i style="font-size: 1.5em;" class="fa-solid fa-basket-shopping"></i></a>
+            </div>
         </div>
-        <nav class="humberger__menu__nav mobile-menu">
-            <ul>
-                <li class="active"><a href="./index.html"><i class="fa-solid fa-house"></i> Inicio</a></li>
-                <li><a href="./index2.html"><i class="fa-solid fa-shop"></i> Tienda</a></li>
-                <li><a href="./mis_pedidos.html"><i class="fa-solid fa-bag-shopping"></i> Mis Pedidos</a></li>
-            </ul>
-        </nav>
-        <div id="mobile-menu-wrap"></div>
-    </div>
-    <!-- Humberger End -->
-
-    <div style="position: fixed; top: 0px; left: 0px; z-index: 1; background-color: #ffff;">
-        <header class="header">
-            <div class="container" style="height: 100px;">
-                <div class="row">
-                    <div class="col-lg-3">
-                        <div class="header__logo">
-                            <a href="./index.html"><img style="width: 76%;" src="img/logo.png" alt=""></a>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <nav class="header__menu">
-                            <ul>
-                                <li class="active"><a href="./index.html">Inicio</a></li>
-                                <li><a href="./shop-grid.html">Tienda</a></li>
-                                <li><a href="./blog.html">Blog</a></li>
-                                <li><a href="./mis_pedidos.html">Mis pedidos</a></li>
-                            </ul>
-                        </nav>
-                    </div>
-                </div>
-                <div class="humberger__open" style="border: none; top: 43px;">
-                    <i class="fa fa-bars"></i>
-                </div>
-                <div style="position: absolute;right: 77px;top: 26px;">
-                    <span id="cantidad_span" class="bad">0</span>
-                    <button onclick="mostrarCarrito()" class="btn btn-warning" style="padding: 15px;border-radius: 50%;"><i class="fa-solid fa-cart-shopping" style="font-size: 1.5em;"></i></button>
-                </div>
-            </div>
-        </header>
-        <section>
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-9">
-                        <div class="hero__search">
-                            <div class="hero__search__phone" style="margin-bottom: 25px;">
-                                <div class="hero__search__phone__icon">
-                                    <i class="fa fa-phone"></i>
-                                </div>
-                                <div class="hero__search__phone__text">
-                                    <h5>+57 311 313 0222</h5>
-                                    <span>Numero de Celular</span>
-                                </div>
-                            </div>
-                            <div class="hero__search__form">
-                                <form action="#">
-                                    <div class="hero__search__categories">
-                                        All Categories
-                                        <span class="arrow_carrot-down"></span>
-                                    </div>
-                                    <input id="filtroDescripcion" oninput="filtrarProductos()" type="text" placeholder="¿Que estas buscando?">
-                                    <button type="submit" class="site-btn"><i class="fas fa-search"></i></button>
-                                </form>
-                            </div>
+        <div class="container" style="margin-top: 80px;">
+            <div class="row">
+                <div class="col-lg-4 col-md-6">
+                    <div class="latest-product__text">
+                        <h4>Lista de productos</h4>
+                        <div id="productos" class="latest-prdouct__slider__item">
+                            
                         </div>
                     </div>
                 </div>
             </div>
-        </section>
-    </div>
+        </div>
+        <div style="position: fixed; bottom: -17px; background-color: white; z-index: 1000; padding-bottom: 30px !important; padding-top: 40px; padding-right: 15px; padding-left: 15px;" class="input-group mb-3">
+            <div class="row" style="width: 100vw;">
+                <div class="col-4">
+                    <h3 style="font-weight: bold;">Total</h3>
+                </div>
+                <div class="col-8 text-right">
+                    <h3 style="font-weight: bold;"><span id="total_comprado">$ 0.00</span></h3>
+                </div>
+            </div>
+            <br>
+        </div>
+        <div id="carrito_de_compra" style="display: none; position: fixed; left: 100vw; top: 0px; z-index: 2000;">
+            <div class="checkout__order" style="height: 100vh !important; width: 100vw !important;">
+                <h4>Tu orden</h4>
+                <div class="row" style="font-weight: bold;">
+                    <div class="col-5">Producto</div>
+                    <div class="col-3">Cantidad</div>
+                    <div class="col-4">Total</div>  
+                </div>
+                <hr>
+                <div id="lista_carrito">
+                    
+                </div>
     
-    <!-- Banner Begin -->
-    <div id="baner_categorias" class="banner" style="display: block; margin-top: 30vh;">
-        <div class="container">
-            <div class="row">
-                <div style="margin-bottom: 20px;" class="col-lg-6 col-md-6 col-sm-6">
-                    <div class="banner__pic" style="height: 200px; background-color: #cbe2f5">
-                        <div class="row" style="height: 200px;">
-                            <div class="col-6" style="display: flex; align-items: center;">
-                                <img src="img/banner/alimentos.png" alt="">
-                            </div>
-                            <div class="col-6" style="display: flex; justify-content: center; flex-direction: column;">
-                                <h4 style="font-weight: 800; font-size: 22px;">Productos de la canasta familiar</h4>
-                                <button style="margin-top: 10px; width: max-content;" class="btn btn-danger">Ver Productos</button>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="input-group mb-3">
+                            <input id="celular" style="font-size: 25px;" type="number" class="form-control" placeholder="Buscar" aria-label="Ingrese su numero celular" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                              <span class="input-group-text" id="basic-addon2"><i class="fas fa-phone"></i></span>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div style="margin-bottom: 20px;" class="col-lg-6 col-md-6 col-sm-6">
-                    <div class="banner__pic" style="height: 200px; background-color: #fbe298">
-                        <div class="row" style="height: 200px;">
-                            <div class="col-6" style="display: flex; align-items: center;">
-                                <img src="img/banner/fritos.png" alt="">
-                            </div>
-                            <div class="col-6" style="display: flex; justify-content: center; flex-direction: column;">
-                                <h4 style="font-weight: 800; font-size: 22px;">Fritos & Jugos</h4>
-                                <button style="margin-top: 10px; width: max-content;" class="btn btn-danger">Ver Productos</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div style="margin-bottom: 20px;" class="col-lg-6 col-md-6 col-sm-6">
-                    <div class="banner__pic" style="height: 200px; background-color: #bcd98f">
-                        <div class="row" style="height: 200px;">
-                            <div class="col-6" style="display: flex; align-items: center;">
-                                <img src="img/banner/bebidas.png" alt="">
-                            </div>
-                            <div class="col-6" style="display: flex; justify-content: center; flex-direction: column;">
-                                <h4 style="font-weight: 800; font-size: 22px;">Gaseosas & Bebidas</h4>
-                                <button style="margin-top: 10px; width: max-content;" class="btn btn-danger">Ver Productos</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div style="margin-bottom: 20px;" class="col-lg-6 col-md-6 col-sm-6">
-                    <div class="banner__pic" style="height: 200px; background-color: #fbbdc3eb">
-                        <div class="row" style="height: 200px;">
-                            <div class="col-6" style="display: flex; align-items: center;">
-                                <img src="img/banner/carnes.png" alt="">
-                            </div>
-                            <div class="col-6" style="display: flex; justify-content: center; flex-direction: column;">
-                                <h4 style="font-weight: 800; font-size: 22px;">Carnes</h4>
-                                <button style="margin-top: 10px; width: max-content;" class="btn btn-danger">Ver Productos</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div style="margin-bottom: 20px;" class="col-lg-6 col-md-6 col-sm-6">
-                    <div class="banner__pic" style="height: 200px; background-color: #fbe298">
-                        <div class="row" style="height: 200px;">
-                            <div class="col-6" style="display: flex; align-items: center;">
-                                <img src="img/banner/aseo.png" alt="">
-                            </div>
-                            <div class="col-6" style="display: flex; justify-content: center; flex-direction: column;">
-                                <h4 style="font-weight: 800; font-size: 22px;">Aseo & Hogar</h4>
-                                <button style="margin-top: 10px; width: max-content;" class="btn btn-danger">Ver Productos</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div style="margin-bottom: 20px;" class="col-lg-6 col-md-6 col-sm-6">
-                    <div class="banner__pic" style="height: 200px; background-color: #cbe2f5">
-                        <div class="row" style="height: 200px;">
-                            <div class="col-6" style="display: flex; align-items: center;">
-                                <img src="img/banner/farmacia.png" alt="">
-                            </div>
-                            <div class="col-6" style="display: flex; justify-content: center; flex-direction: column;">
-                                <h4 style="font-weight: 800; font-size: 22px;">Productos de farmacia</h4>
-                                <button style="margin-top: 10px; width: max-content;" class="btn btn-danger">Ver Productos</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <hr>
+
+                <div style="margin-bottom: -11px; border-bottom: 0px !important;" class="checkout__order__total">Subtotal <span id="total_pagar">$0.00</span></div>
+                <div style="margin-bottom: -11px; border-bottom: 0px !important;" class="checkout__order__total">Domicilio <span id="total_pagar">$500</span></div>
+                <div style="margin-bottom: -11px; border-bottom: 0px !important;" class="checkout__order__total">Total <span id="total_pagar_total">$0.00</span></div>
+                <hr>
+
+                <button onclick="verificarCliente()" class="site-btn">REALIZAR PEDIDO</button>
+                <button onclick="cerrarCarrito()" type="submit" style="background-color: brown;" class="site-btn">VOLVER</button>
             </div>
         </div>
-    </div>
-    <!-- Banner End -->
+    </section>
 
-    <div id="div_productos" class="container" style="min-height: 60vh; margin-top: 33vh; display: none;">
-        <div class="row">
-            <div class="col-lg-4 col-md-6">
-                <div class="latest-product__text">
-                    <div id="productos" class="latest-prdouct__slider__item">
-                        
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <div id="carrito_de_compra" style="display: none; position: fixed; left: 100vw; top: 0px; z-index: 2000;">
-        <div class="checkout__order" style="height: 100vh !important; width: 100vw !important;">
-            <h4>Tu orden</h4>
-            <div class="row" style="font-weight: bold;">
-                <div class="col-5">Producto</div>
-                <div class="col-3">Cantidad</div>
-                <div class="col-4">Total</div>  
-            </div>
-            <hr>
-            <div id="lista_carrito">
-                
-            </div>
-
-            <div class="row">
-                <div class="col-12">
-                    <div class="input-group mb-3">
-                        <input id="celular" style="font-size: 25px;" type="number" class="form-control" placeholder="Buscar" aria-label="Ingrese su numero celular" aria-describedby="basic-addon2">
-                        <div class="input-group-append">
-                          <span class="input-group-text" id="basic-addon2"><i class="fas fa-phone"></i></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <hr>
-
-            <div style="margin-bottom: -11px; border-bottom: 0px !important;" class="checkout__order__total">Subtotal <span id="total_pagar">$0.00</span></div>
-            <div style="margin-bottom: -11px; border-bottom: 0px !important;" class="checkout__order__total">Domicilio <span id="total_pagar">$500</span></div>
-            <div style="margin-bottom: -11px; border-bottom: 0px !important;" class="checkout__order__total">Total <span id="total_pagar_total">$0.00</span></div>
-            <hr>
-
-            <button onclick="verificarCliente()" class="site-btn">REALIZAR PEDIDO</button>
-            <button onclick="cerrarCarrito()" type="submit" style="background-color: brown;" class="site-btn">VOLVER</button>
-        </div>
-    </div>
 
     <div class="modal fade" id="modal_confirmar_compra" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -329,45 +195,8 @@
         </div>
     </div>
 
-    <br><br>
-    <!-- Footer Section Begin -->
-    <footer class="footer spad">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-3 col-md-6 col-sm-6 text-center">
-                    <div class="footer__about">
-                        <div class="footer__about__logo">
-                            <a href="./index.html"><img style="width: 89%;" src="img/logo.png" alt=""></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="footer__copyright">
-                        <div class="footer__copyright__text">
-                            <p>
-                                Copyright &copy;
-                                <script>document.write(new Date().getFullYear());</script> All rights reserved <i class="fa fa-heart" aria-hidden="true"></i>  
-                            </p>
-                        </div>
-                        <div class="footer__copyright__payment"><img src="img/payment-item.png" alt=""></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
-    <!-- Footer Section End -->
+    <!-- Latest Product Section End -->
 
-    <!-- Js Plugins -->
-    <script src="js/jquery-3.3.1.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
-    <script src="js/jquery.nice-select.min.js"></script>
-    <script src="js/jquery-ui.min.js"></script>
-    <script src="js/jquery.slicknav.js"></script>
-    <script src="js/mixitup.min.js"></script>
-    <script src="js/owl.carousel.min.js"></script>
-    <script src="js/main.js"></script>
     <script src="js/jquery-3.3.1.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="toast/toastr.min.js"></script>
@@ -392,6 +221,22 @@
 
         var lista_productos = [];
         var carrito = [];
+
+        $(document).ready(function(){
+            $.ajax({
+                url: 'productos.php?filtro=inicial',
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    lista_productos = data;
+                    mapearTodo();
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error al obtener los productos:', error);
+                }
+            });
+        });
+
 
         function mapearTodo(){
             var productos = '';
@@ -443,26 +288,11 @@
 
         function filtrarProductos(){
             var filtro = document.getElementById("filtroDescripcion").value;
-            var filtroLength = filtro.length;
 
-            if (filtroLength % 2 === 0) {
-                setTimeout(()=>{
-                    if(filtro == ""){
-                    document.getElementById("baner_categorias").style.display = "block";
-                        document.getElementById("div_productos").style.display = "none";
-                    }else{
-                        document.getElementById("baner_categorias").style.display = "none";
-                        document.getElementById("div_productos").style.display = "block";
-                        document.getElementById("productos").innerHTML = "";
-                        setTimeout(()=>{
-                            peti_filtrar(filtro);
-                        }, 500)
-                    }
-                }, 500)
+            if(filtro == ""){
+                filtro = "inicial";
             }
-        }
 
-        function peti_filtrar(filtro){
             $.ajax({
                 url: 'productos.php?filtro='+filtro,
                 type: 'GET',
@@ -475,29 +305,7 @@
                     console.error('Error al obtener los productos:', error);
                 }
             });
-        }
 
-        function aumentar_value(index){
-            var valor_actual = 0;
-            if(document.getElementById("caja_texto_"+index).value == ""){
-                valor_actual = 0;
-            }else{
-                valor_actual = parseInt(document.getElementById("caja_texto_"+index).value);
-            }
-            valor_actual += 1;
-            document.getElementById("caja_texto_"+index).value = valor_actual;
-        }
-
-        function disminuir_value(index){
-            var valor_actual = 0;
-            if(document.getElementById("caja_texto_"+index).value == "" || document.getElementById("caja_texto_"+index).value == "0"){
-                valor_actual = 0;
-                document.getElementById("caja_texto_"+index).value = valor_actual;
-            }else{
-                valor_actual = parseInt(document.getElementById("caja_texto_"+index).value);
-                valor_actual -= 1;
-                document.getElementById("caja_texto_"+index).value = valor_actual;
-            }
         }
 
         function agregarCarrito(index, codigo_barras, tipo_unidad){
@@ -537,6 +345,8 @@
                         carrito.push(producto);
                         toastr.success('Producto agregado al carrito');
                     }
+
+                    actualizarCantidad();
                     mapearTodo();
                     document.getElementById("cantidad_span").innerHTML = carrito.length;
                 }else{
@@ -549,9 +359,21 @@
 
         function eliminarCarrito(codigo_barras){
             carrito = carrito.filter(producto => producto.codigo_barras !==  codigo_barras);
+            actualizarCantidad();
             mapearProductosCarrito();
             mapearTodo();
             document.getElementById("cantidad_span").innerHTML = carrito.length;
+        }
+
+        function actualizarCantidad(){
+            var total = 0;
+            $.each(carrito, function(index, producto) {
+                total += producto.cantidad * parseFloat(producto.precio_venta);
+            });
+
+            var totalFormateado = total.toLocaleString('es-CO', { style: 'currency', currency: 'COP' });
+
+            document.getElementById("total_comprado").innerText = totalFormateado;
         }
 
         function mostrarCarrito(){
@@ -679,6 +501,31 @@
                 toastr.error('¡Todos los datos son obligatorios!');
             }
         }
+
+        function aumentar_value(index){
+            var valor_actual = 0;
+            if(document.getElementById("caja_texto_"+index).value == ""){
+                valor_actual = 0;
+            }else{
+                valor_actual = parseInt(document.getElementById("caja_texto_"+index).value);
+            }
+            valor_actual += 1;
+            document.getElementById("caja_texto_"+index).value = valor_actual;
+        }
+
+        function disminuir_value(index){
+            var valor_actual = 0;
+            if(document.getElementById("caja_texto_"+index).value == "" || document.getElementById("caja_texto_"+index).value == "0"){
+                valor_actual = 0;
+                document.getElementById("caja_texto_"+index).value = valor_actual;
+            }else{
+                valor_actual = parseInt(document.getElementById("caja_texto_"+index).value);
+                valor_actual -= 1;
+                document.getElementById("caja_texto_"+index).value = valor_actual;
+            }
+        }
     </script>
+
 </body>
+
 </html>
