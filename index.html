@@ -251,8 +251,9 @@
     <!-- Banner End -->
 
     <div id="div_productos" class="container" style="min-height: 60vh; margin-top: 33vh; display: none;">
-        <div style="display: none;" class="text-right" id="opciones_categoria">
-            <button onclick="mostrarInicio()" style="border-radius: 50%; width: 53px; height: 53px;" class="btn btn-danger"><i class="fa-solid fa-arrow-left"></i></button>
+        <div style="display: none; position: fixed;right: 20px;top: 236px;z-index: 2;" class="text-right" id="opciones_categoria">
+            <button onclick="mostrarInicio()" style="border-radius: 50%; width: 44px; height: 44px; font-size: 14px;" class="btn btn-danger"><i class="fa-solid fa-arrow-left"></i></button>
+            <br>
         </div>
         <div class="row">
             <div class="col-lg-4 col-md-6">
@@ -566,6 +567,11 @@
                         carrito.push(producto);
                         toastr.success('Producto agregado al carrito');
                     }
+
+                    // Guardamos el array en el localStorage con la clave "carrito"
+                    var carritoJSON = JSON.stringify(carrito);
+                    localStorage.setItem("carrito", carritoJSON);
+
                     mapearTodo();
                     document.getElementById("cantidad_span").innerHTML = carrito.length;
                 }else{
@@ -579,6 +585,11 @@
         function eliminarCarrito(codigo_barras){
             carrito = carrito.filter(producto => producto.codigo_barras !==  codigo_barras);
             mapearProductosCarrito();
+
+            // Guardamos el array en el localStorage con la clave "carrito"
+            var carritoJSON = JSON.stringify(carrito);
+            localStorage.setItem("carrito", carritoJSON);
+
             mapearTodo();
             document.getElementById("cantidad_span").innerHTML = carrito.length;
         }
@@ -699,8 +710,9 @@
                             icon: 'success',
                         });
 
+                        localStorage.removeItem("carrito");
                         setTimeout(()=>{
-                           location.reload();
+                            location.reload();
                         }, 1900)
                     }
                 });
@@ -708,6 +720,39 @@
                 toastr.error('¡Todos los datos son obligatorios!');
             }
         }
+
+        var fechaHoraActual = new Date();
+        var options = {timeZone: 'America/Bogota'};
+        var fechaHoraColombia = fechaHoraActual.toLocaleString('es-CO', options);
+        var hora = fechaHoraActual.getHours();
+       
+        if (hora < 6 || hora >= 21) {
+            Swal.fire({
+                title: "¡Atención!",
+                allowOutsideClick: false,
+                html: '<p> Provisiones Carlos Andres le informa que, Los domicilios están disponibles en el siguiente horario <br> <strong> (6:00 AM) hasta las (9:00 PM) </strong> </p>',
+                showConfirmButton: false,
+                icon: 'info',
+            });
+        }
+
+        function verificarCarritoItems(){
+            var carritoRecuperado = localStorage.getItem("carrito");
+            if (carritoRecuperado) {
+                carrito = JSON.parse(carritoRecuperado);
+                mapearTodo();
+                setTimeout(()=>{
+                    mapearProductosCarrito();
+                    document.getElementById("cantidad_span").innerHTML = carrito.length;
+                    console.log("Carrito recuperado:", carrito);
+                }, 1000)
+               
+            } else {
+                console.log("No hay valores en el carrito.");
+            }
+        }
+
+        verificarCarritoItems();
     </script>
 </body>
 </html>
